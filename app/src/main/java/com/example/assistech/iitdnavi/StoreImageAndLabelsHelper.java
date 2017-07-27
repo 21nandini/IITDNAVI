@@ -64,7 +64,7 @@ public class StoreImageAndLabelsHelper extends SQLiteOpenHelper {
         columns[1]=KEY_IMAGE;
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor= db.query(TABLE_NAME,null,null,null,null,null,null,"10");
+        Cursor cursor= db.query(TABLE_NAME,null,null,null,null,null,KEY_ID +" DESC","10");
 
         return cursor;
     }
