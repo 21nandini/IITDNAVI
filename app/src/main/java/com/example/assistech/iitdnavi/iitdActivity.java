@@ -6,6 +6,7 @@ import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
@@ -51,6 +52,7 @@ public class iitdActivity extends AppCompatActivity {
     private final String LOG_TAG = "iitdActivity";
     private ImageView selectedImage;
     private TextView resultTextView;
+    StoreImageAndLabelsHelper dbReference= new StoreImageAndLabelsHelper(iitdActivity.this);
     Account mAccount;
 
     @Override
@@ -204,6 +206,11 @@ public class iitdActivity extends AppCompatActivity {
 
             protected void onPostExecute(String result) {
                 resultTextView.setText(result);
+                Bitmap bitmap = ((BitmapDrawable)selectedImage.getDrawable()).getBitmap();
+                byte[] image =DbBitmapUtility.getBytes(bitmap);
+
+                dbReference.addEntry(result,image);
+
             }
         }.execute();
     }
@@ -296,6 +303,12 @@ public class iitdActivity extends AppCompatActivity {
             new GetTokenTask(iitdActivity.this, mAccount, SCOPE, REQUEST_ACCOUNT_AUTHORIZATION)
                     .execute();
         }
+    }
+    public void showResults(View v){
+        Intent intent= new Intent(this,MainActivity.class);
+        startActivity(intent);
+
+
     }
 
     public void onTokenReceived(String token){

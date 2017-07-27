@@ -49,6 +49,13 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:text="Select Image" />
+
+            <Button
+                android:id="@+id/last10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="showResults"
+                android:text="Show Last 10 Results" />
         </LinearLayout>
     </ScrollView>
 
