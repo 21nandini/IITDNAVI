@@ -3,6 +3,7 @@ package com.example.assistech.iitdnavi;
 import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -18,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,7 +56,7 @@ public class iitdActivity extends AppCompatActivity {
     private TextView resultTextView;
     StoreImageAndLabelsHelper dbReference= new StoreImageAndLabelsHelper(iitdActivity.this);
     Account mAccount;
-
+    ProgressDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,6 +151,12 @@ public class iitdActivity extends AppCompatActivity {
         resultTextView.setText(getString(R.string.blank));
 
         new AsyncTask<Object, Void, String>() {
+
+            @Override
+            protected void onPreExecute(){
+                startProgress();
+            }
+
             @Override
             protected String doInBackground(Object... params) {
                 try {
@@ -210,6 +218,7 @@ public class iitdActivity extends AppCompatActivity {
                 byte[] image =DbBitmapUtility.getBytes(bitmap);
 
                 dbReference.addEntry(result,image);
+                closeProgress();
 
             }
         }.execute();
@@ -315,4 +324,19 @@ public class iitdActivity extends AppCompatActivity {
         accessToken = token;
         launchImagePicker();
     }
+    public void startProgress(){
+
+        dialog = new ProgressDialog(this);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setMessage("Loading. Please wait...");
+        dialog.setIndeterminate(true);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+    public  void closeProgress(){
+        dialog.hide();
+        dialog.dismiss();
+
+    }
+
 }
